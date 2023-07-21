@@ -247,7 +247,12 @@ public class BluetoothHeadsetClient {
 
     public boolean terminateCall(BluetoothDevice device, int index) {
         try {
-            return (boolean)hfpClientInstance.getClass().getMethod("terminateCall", new Class[]{BluetoothDevice.class, int.class}).invoke(hfpClientInstance, device, index);
+            for (BluetoothHeadsetClientCall clientCall: this.getCurrentCalls(device)) {
+                if (clientCall.getId() == index) {
+                    // (boolean)hfpClientInstance.getClass().getMethod("terminateCall", new Class[]{BluetoothDevice.class, Class.forName("android.bluetooth.BluetoothHeadsetClientCall")}).invoke(hfpClientInstance, device, clientCall.hfpClientCallInstance);
+                    return (boolean)hfpClientInstance.getClass().getMethod("terminateCall", new Class[]{BluetoothDevice.class, clientCall.hfpClientCallInstance.getClass()}).invoke(hfpClientInstance, device, clientCall.hfpClientCallInstance);
+                }
+            }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
             e.printStackTrace();
         }
@@ -308,18 +313,18 @@ public class BluetoothHeadsetClient {
         return false;
     }
 
-    public boolean connectAudio() {
+    public boolean connectAudio(BluetoothDevice device) {
         try {
-            return (boolean)hfpClientInstance.getClass().getMethod("connectAudio", new Class[0]).invoke(hfpClientInstance);
+            return (boolean)hfpClientInstance.getClass().getMethod("connectAudio", new Class[]{BluetoothDevice.class}).invoke(hfpClientInstance, device);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean disconnectAudio() {
+    public boolean disconnectAudio(BluetoothDevice device) {
         try {
-            return (boolean)hfpClientInstance.getClass().getMethod("disconnectAudio", new Class[0]).invoke(hfpClientInstance);
+            return (boolean)hfpClientInstance.getClass().getMethod("disconnectAudio", new Class[]{BluetoothDevice.class}).invoke(hfpClientInstance, device);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
             e.printStackTrace();
         }

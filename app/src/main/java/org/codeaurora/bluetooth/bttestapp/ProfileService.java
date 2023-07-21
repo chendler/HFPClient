@@ -768,7 +768,7 @@ public class ProfileService extends Service {
 
         mAdapter.closeProfileProxy(wrapper.android.bluetooth.BluetoothProfile.HEADSET_CLIENT, mHfpClient.hfpClientInstance);
 
-        mAdapter.closeProfileProxy(wrapper.android.bluetooth.BluetoothProfile.AVRCP_CONTROLLER, (BluetoothProfile) mAvrcpController);
+        mAdapter.closeProfileProxy(wrapper.android.bluetooth.BluetoothProfile.AVRCP_CONTROLLER, (BluetoothProfile) mAvrcpController.avrcpControllerInstance);
 
         unregisterReceiver(mReceiver);
 

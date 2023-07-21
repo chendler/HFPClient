@@ -1,6 +1,7 @@
 package tk.rabidbeaver.hfpclient;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -13,11 +14,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.telecom.PhoneAccount;
+import android.telecom.PhoneAccountHandle;
+import android.telecom.TelecomManager;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
 import org.codeaurora.bluetooth.bttestapp.HfpTestActivity;
 import org.codeaurora.bluetooth.bttestapp.ProfileService;
 
@@ -257,7 +263,7 @@ public class HFPNotificationService extends Service {
             while (mBluetoothHeadsetClient.getAudioState(mDevice) != BluetoothHeadsetClient.STATE_AUDIO_CONNECTED
                     && (ringingHoldover > System.currentTimeMillis() - 10000 || onCall)) {
                 if (mBluetoothHeadsetClient.getAudioState(mDevice) != BluetoothHeadsetClient.STATE_AUDIO_CONNECTING)
-                    mBluetoothHeadsetClient.connectAudio();
+                    mBluetoothHeadsetClient.connectAudio(mDevice);
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ie){
@@ -317,20 +323,20 @@ public class HFPNotificationService extends Service {
 
     private void showNotification() {
         Intent phoneIntent = new Intent(this, HfpTestActivity.class);
-        PendingIntent phonePIntent = PendingIntent.getActivity(this, 1, phoneIntent, 0);
+        PendingIntent phonePIntent = PendingIntent.getActivity(this, 1, phoneIntent, PendingIntent.FLAG_MUTABLE);
 
         Intent acceptIntent = new Intent(this, HFPNotificationService.class);
         acceptIntent.setAction("accept");
-        PendingIntent acceptPIntent = PendingIntent.getService(this, 0, acceptIntent, 0);
+        PendingIntent acceptPIntent = PendingIntent.getService(this, 0, acceptIntent, PendingIntent.FLAG_MUTABLE);
 
         Intent rejectIntent = new Intent(this, HFPNotificationService.class);
         rejectIntent.setAction("reject");
-        PendingIntent rejectPIntent = PendingIntent.getService(this, 0, rejectIntent, 0);
+        PendingIntent rejectPIntent = PendingIntent.getService(this, 0, rejectIntent, PendingIntent.FLAG_MUTABLE);
 
         Intent hangupIntent = new Intent(this, HFPNotificationService.class);
         hangupIntent.setAction("hangup");
         hangupIntent.putExtra("ID", callId);
-        PendingIntent hangupPIntent = PendingIntent.getService(this, 0, hangupIntent, 0);
+        PendingIntent hangupPIntent = PendingIntent.getService(this, 0, hangupIntent, PendingIntent.FLAG_MUTABLE);
 
         //TODO: Signal strength coming from bluetooth is in the range of 0-5, but our
         // TODO graphics only apply to the range 0-4.
@@ -346,7 +352,17 @@ public class HFPNotificationService extends Service {
             else signalIcon+="_fully";
         }
 
-        Notification.Builder builder = new Notification.Builder(this)
+        String NOTIFICATION_CHANNEL_ID = "tk.rabidbeaver.hfpclient";
+        String channelName = "HFP Client Background Service";
+
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("HFP Client")
                 .setContentText("BT:"+(connected?1:0)+",BAT:"+cellBattery+",AUD:"+(audioConnected?1:0))
                 .setSmallIcon(getResources().getIdentifier(signalIcon, "drawable", this.getPackageName()))
@@ -380,6 +396,7 @@ public class HFPNotificationService extends Service {
 
         notification = builder.build();
         if (ringing) notification.flags = Notification.FLAG_INSISTENT;
+
 
         stopForeground(true);
         startForeground(17111, notification);
