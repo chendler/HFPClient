@@ -29,10 +29,10 @@
 -->
 <resources>
 
-    <item type="id" name="dialpad_button" />
-    <item type="id" name="dialpad_button_pos" />
+    <item name="dialpad_button" type="id" />
+    <item name="dialpad_button_pos" type="id" />
 
-<!--
+    <!--
 <string name=""></string>
 -->
     <!-- General -->
@@ -319,7 +319,7 @@
     <string name="call_action_private_mode">Private mode</string>
     <string name="call_action_explicit_transfer">Explicit transfer</string>
 
-        <!-- HFP result codes messages -->
+    <!-- HFP result codes messages -->
     <string name="hfptest_result_ok_text">OK</string>
     <string name="hfptest_result_error_text">Error</string>
     <string name="hfptest_result_no_carrier_text">Error: no carrier</string>
@@ -329,7 +329,7 @@
     <string name="hfptest_result_blacklisted_text">Error: blacklisted</string>
     <string name="hfptest_result_cme_text">Error: CME</string>
 
-       <!-- AVRCP -->
+    <!-- AVRCP -->
     <string name="passthru_play">PLAY</string>
     <string name="passthru_pause">PAUSE</string>
     <string name="passthru_stop">STOP</string>
