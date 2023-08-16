@@ -168,43 +168,49 @@ public class IndicatorsFragment extends Fragment implements OnClickListener {
 
             case BluetoothHeadsetClient.STATE_AUDIO_CONNECTED:
 
-            android.media.AudioManager mAudioManager = (android.media.AudioManager)this.getContext().getSystemService(
-                Context.AUDIO_SERVICE);
+//          android.media.AudioManager mAudioManager = (android.media.AudioManager)this.getContext().getSystemService(
+//             Context.AUDIO_SERVICE);
 
-            //For phone speaker(loadspeaker)
-                int mode =  mAudioManager.getMode();
+//            //For phone speaker(loadspeaker)
+//                int mode =  mAudioManager.getMode();
+//
+//                mAudioManager.setMode( AudioManager.MODE_IN_COMMUNICATION);
+//                //mAudioManager.stopBluetoothSco();
+//                //mAudioManager.setBluetoothScoOn(false);
+//                //mAudioManager.setSpeakerphoneOn(true);
+//
+//                mAudioManager.
 
-                mAudioManager.setMode( AudioManager.MODE_IN_COMMUNICATION);
-                //mAudioManager.stopBluetoothSco();
-                //mAudioManager.setBluetoothScoOn(false);
-                //mAudioManager.setSpeakerphoneOn(true);
+//
+//                mAudioManager.setMode(AudioManager.MODE_NORMAL);
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                    AudioDeviceInfo loudSpeakerAudioDevice = null;
-                    List<AudioDeviceInfo> audioDevices = mAudioManager.getAvailableCommunicationDevices();
-
-                    for (AudioDeviceInfo audioDevice : audioDevices)
-                    {
-                        if (audioDevice.getType() == AudioDeviceInfo.TYPE_USB_HEADSET)
-                        {
-                            loudSpeakerAudioDevice = audioDevice;
-                        }
-                    }
-
-                    if (loudSpeakerAudioDevice != null)
-                    {
-                        Log.i("Demo", "Current AudioDevice = " + mAudioManager.getCommunicationDevice().toString());
-                        //if (mAudioManager.getCommunicationDevice().getType() == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE)
-                       // {
-                            Log.i("Demo", "Setting to loudSpeakerAudioDevice = " + loudSpeakerAudioDevice.toString());
-                            if (mAudioManager.setCommunicationDevice(loudSpeakerAudioDevice) == false)
-                            {
-                                Log.e("Demo", "Failed to set audio device");
-                            }
-                            Log.i("Demo", "New AudioDevice = " + mAudioManager.getCommunicationDevice().toString());
-                       // }
-                    }
-                }
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+//                    AudioDeviceInfo loudSpeakerAudioDevice = null;
+//                    List<AudioDeviceInfo> audioDevices = mAudioManager.getAvailableCommunicationDevices();
+//
+//                    for (AudioDeviceInfo audioDevice : audioDevices)
+//                    {
+//                        if (audioDevice.getType() == AudioDeviceInfo.TYPE_USB_HEADSET)
+//                        {
+//                            loudSpeakerAudioDevice = audioDevice;
+//                        }
+//                    }
+//
+//                    if (loudSpeakerAudioDevice != null)
+//                    {
+//                        Log.i("Demo", "Current AudioDevice = " + mAudioManager.getCommunicationDevice().toString());
+//                        //if (mAudioManager.getCommunicationDevice().getType() == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE)
+//                       // {
+//                            Log.i("Demo", "Setting to loudSpeakerAudioDevice = " + loudSpeakerAudioDevice.toString());
+//
+//                            if (mAudioManager.setCommunicationDevice(loudSpeakerAudioDevice) == false)
+//                            {
+//                                Log.e("Demo", "Failed to set audio device");
+//                            }
+//                            Log.i("Demo", "New AudioDevice = " + mAudioManager.getCommunicationDevice().toString());
+//                       // }
+//                    }
+//                }
 
                 //mAudioManager.setCommunicationDevice()
 
